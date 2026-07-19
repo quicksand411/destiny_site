@@ -1,22 +1,79 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { useFloating, offset, flip, shift, autoUpdate } from "@floating-ui/react";
 import { SubclassEntry } from "@/content/types";
 
 export default function SubclassChip({ subclass }: { subclass: SubclassEntry }) {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const isCoarseRef = useRef(false);
   const isPrismatic = subclass.colorKey === "prismatic";
+
+  const { refs, floatingStyles } = useFloating({
+    open,
+    onOpenChange: setOpen,
+    strategy: "fixed",
+    middleware: [offset(12), flip(), shift({ padding: 16 })],
+    whileElementsMounted: autoUpdate,
+  });
+
+  useEffect(() => {
+    setMounted(true);
+    if (typeof window !== "undefined") {
+      isCoarseRef.current = window.matchMedia("(pointer: coarse)").matches;
+    }
+  }, []);
+
+  const followCursor = (e: React.MouseEvent) => {
+    if (isCoarseRef.current) return;
+    refs.setPositionReference({
+      getBoundingClientRect() {
+        return {
+          x: e.clientX,
+          y: e.clientY,
+          top: e.clientY,
+          left: e.clientX,
+          right: e.clientX,
+          bottom: e.clientY,
+          width: 0,
+          height: 0,
+        };
+      },
+    });
+  };
+
+  const handleMouseEnter = (e: React.MouseEvent) => {
+    if (isCoarseRef.current) return;
+    followCursor(e);
+    setOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    setOpen(false);
+    refs.setPositionReference(null);
+  };
+
+  const handleBlur = () => {
+    setOpen(false);
+    refs.setPositionReference(null);
+  };
 
   return (
     <div
+      ref={refs.setReference}
       data-hover-target
       tabIndex={0}
       className="group relative inline-block outline-none"
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseMove={followCursor}
+      onMouseLeave={handleMouseLeave}
       onFocus={() => setOpen(true)}
-      onBlur={() => setOpen(false)}
-      onClick={() => setOpen((v) => !v)}
+      onBlur={handleBlur}
+      onClick={() => {
+        if (isCoarseRef.current) setOpen((v) => !v);
+      }}
     >
       <span
         className="inline-flex cursor-default items-center rounded-full border px-4 py-1.5 text-sm font-medium tracking-wide transition-transform duration-200 group-hover:scale-105"
@@ -33,14 +90,25 @@ export default function SubclassChip({ subclass }: { subclass: SubclassEntry }) 
         {subclass.name}
       </span>
 
-      <div
-        role="tooltip"
-        className={`pointer-events-none absolute left-1/2 top-full z-40 mt-2 w-64 -translate-x-1/2 rounded-md border border-white/10 bg-void-950/95 p-3 text-xs leading-relaxed text-mute shadow-lg transition-all duration-200 ${
-          open ? "opacity-100 scale-100" : "opacity-0 scale-95"
-        }`}
-      >
-        {subclass.description}
-      </div>
+      {mounted &&
+        createPortal(
+          <div
+            ref={refs.setFloating}
+            style={floatingStyles}
+            role="tooltip"
+            className="pointer-events-none z-40 w-64"
+          >
+            <div
+              className={`rounded-md border border-white/10 bg-void-950/95 p-3 text-xs leading-relaxed text-mute shadow-lg transition-all duration-200 ${
+                open ? "opacity-100 scale-100" : "opacity-0 scale-95"
+              }`}
+              style={{ transformOrigin: "top center" }}
+            >
+              {subclass.description}
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   );
 }

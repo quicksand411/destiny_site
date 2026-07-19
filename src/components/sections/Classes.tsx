@@ -1,3 +1,4 @@
+import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeading from "@/components/SectionHeading";
 import SubclassChip from "@/components/SubclassChip";
@@ -12,7 +13,15 @@ import {
 export default function Classes() {
   return (
     <section id="classes" className="relative overflow-hidden py-24 md:py-32">
-      <div className="mx-auto max-w-5xl px-4">
+      <Image
+        src="/images/bg/orrery-earth-moon-indigo.jpg"
+        alt=""
+        fill
+        className="object-cover opacity-20"
+        sizes="100vw"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-void-950/85 via-void-950/80 to-void-950" />
+      <div className="relative mx-auto max-w-5xl px-4">
         <SectionHeading kicker="Section 4" title="Classes & Subclasses" subtitle={classIntro} />
 
         <div className="mb-16 grid gap-5 md:grid-cols-3">

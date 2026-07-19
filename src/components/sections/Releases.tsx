@@ -1,6 +1,6 @@
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeading from "@/components/SectionHeading";
-import CoverHoverCard from "@/components/CoverHoverCard";
+import ReleaseRoadmap from "@/components/ReleaseRoadmap";
 import {
   releasesIntro,
   destiny1Releases,
@@ -8,41 +8,15 @@ import {
   darknessEraReleases,
   finalEraReleases,
 } from "@/content/releases";
-import { ReleaseRow } from "@/content/types";
 
-function ReleaseStrip({ title, rows }: { title: string; rows: ReleaseRow[] }) {
-  return (
-    <div className="mb-14">
-      <ScrollReveal className="mb-4">
-        <h3 className="font-display text-lg font-medium tracking-wide text-cyan-traveler">
-          {title}
-        </h3>
-      </ScrollReveal>
-      <div className="flex gap-4 overflow-x-auto pb-3">
-        {rows.map((r) => {
-          const card = (
-            <div
-              data-hover-target={r.coverSlug ? true : undefined}
-              tabIndex={r.coverSlug ? 0 : undefined}
-              className="interactive-hover flex h-full w-64 flex-shrink-0 flex-col rounded-lg border border-white/10 bg-white/[0.03] p-5 outline-none transition-all duration-300 hover:-translate-y-1 hover:border-cyan-traveler/40"
-            >
-              <span className="font-display text-xs uppercase tracking-[0.15em] text-traveler">
-                {r.date}
-              </span>
-              <h4 className="mt-1.5 font-display text-base font-medium text-ink">{r.title}</h4>
-              <p className="mt-2 text-xs leading-relaxed text-mute">{r.comment}</p>
-            </div>
-          );
-          return (
-            <ScrollReveal key={r.title} className="flex-shrink-0">
-              {r.coverSlug ? <CoverHoverCard cover={r.coverSlug}>{card}</CoverHoverCard> : card}
-            </ScrollReveal>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
+// Destiny 2's three release arrays, combined into a single chronological
+// roadmap (13 items total). Sorted by date rather than relying on source
+// array order, since "The Edge of Fate" (Jul 15, 2025) actually ships
+// before "Destiny: Rising" (Aug 28, 2025) despite the latter's array
+// position in src/content/releases.ts.
+const destiny2AllReleases = [...destiny2Releases, ...darknessEraReleases, ...finalEraReleases].sort(
+  (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+);
 
 export default function Releases() {
   return (
@@ -50,18 +24,32 @@ export default function Releases() {
       <div className="mx-auto max-w-6xl px-4">
         <SectionHeading kicker="Section 12" title="Release Timeline" subtitle={releasesIntro.d1} />
 
-        <ReleaseStrip title="Destiny (2014–2017)" rows={destiny1Releases} />
-        <ReleaseStrip title="Destiny 2: Years 1–3" rows={destiny2Releases} />
-        <ReleaseStrip
-          title={'The "Darkness Era" (Beyond Light — The Witch Queen — Lightfall)'}
-          rows={darknessEraReleases}
-        />
-        <ReleaseStrip
-          title="The Saga's Finale & the Fate Saga (2024–2026)"
-          rows={finalEraReleases}
-        />
+        <ScrollReveal className="mb-4">
+          <h3 className="font-display text-lg font-medium tracking-wide text-cyan-traveler">
+            Destiny (2014–2016)
+          </h3>
+        </ScrollReveal>
+        <ScrollReveal className="mb-16">
+          <ReleaseRoadmap items={destiny1Releases} />
+        </ScrollReveal>
 
-        <ScrollReveal className="mx-auto mt-6 max-w-3xl text-center text-sm leading-relaxed text-mute">
+        <ScrollReveal className="mb-4">
+          <h3 className="font-display text-lg font-medium tracking-wide text-cyan-traveler">
+            Destiny 2 (2017–2026)
+          </h3>
+        </ScrollReveal>
+        <ScrollReveal>
+          <ReleaseRoadmap
+            items={destiny2AllReleases}
+            eraMarkers={[
+              { beforeSlug: "destiny-2-base", label: "Years 1–3" },
+              { beforeSlug: "beyond-light", label: "Darkness Era" },
+              { beforeSlug: "the-final-shape", label: "Fate Saga" },
+            ]}
+          />
+        </ScrollReveal>
+
+        <ScrollReveal className="mx-auto mt-10 max-w-3xl text-center text-sm leading-relaxed text-mute">
           {releasesIntro.finalNote}
         </ScrollReveal>
       </div>

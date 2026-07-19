@@ -1,3 +1,4 @@
+import Image from "next/image";
 import SectionHeading from "@/components/SectionHeading";
 import ScrollReveal from "@/components/ScrollReveal";
 import CoverHoverCard from "@/components/CoverHoverCard";
@@ -9,8 +10,16 @@ import { covers } from "@/content/covers";
 export default function Timeline() {
   return (
     <section id="timeline" className="relative overflow-hidden py-24 md:py-32">
+      <Image
+        src="/images/bg/orrery-traveler.jpg"
+        alt=""
+        fill
+        className="object-cover opacity-[0.15]"
+        sizes="100vw"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-void-950/90 via-void-950/85 to-void-950" />
       <Starfield className="opacity-40" />
-      <div className="relative mx-auto max-w-4xl px-4">
+      <div className="relative mx-auto max-w-6xl px-4">
         <SectionHeading
           kicker="Section 2"
           title="Timeline & Lore of the Universe"
@@ -20,16 +29,16 @@ export default function Timeline() {
         <OrreryDivider />
 
         <div className="relative mt-8">
-          {/* spine */}
-          <div className="absolute left-4 top-0 h-full w-px bg-gradient-to-b from-cyan-traveler/60 via-traveler/30 to-transparent md:left-1/2" />
+          {/* spine, running along the left edge */}
+          <div className="absolute left-3 top-0 h-full w-px bg-gradient-to-b from-cyan-traveler/60 via-traveler/30 to-transparent md:left-4" />
 
           <ol className="space-y-14">
-            {timeline.map((entry, idx) => {
+            {timeline.map((entry) => {
               const cardBody = (
                 <div
                   data-hover-target={entry.coverSlug ? true : undefined}
                   tabIndex={entry.coverSlug ? 0 : undefined}
-                  className={`interactive-hover relative rounded-xl border border-white/10 bg-white/[0.03] p-6 outline-none transition-all duration-300 md:p-7 ${
+                  className={`interactive-hover relative rounded-xl border border-white/10 bg-white/[0.03] p-6 outline-none transition-all duration-300 md:p-8 ${
                     entry.coverSlug ? "cursor-help hover:-translate-y-1 hover:border-cyan-traveler/40 hover:shadow-[0_0_30px_rgba(126,203,255,0.2)]" : ""
                   }`}
                 >
@@ -64,38 +73,18 @@ export default function Timeline() {
               );
 
               return (
-                <li key={entry.id} className="relative pl-12 md:pl-0">
-                  <div className="hidden md:grid md:grid-cols-2 md:gap-10">
-                    <div className={idx % 2 === 0 ? "md:col-start-1" : "md:col-start-2"}>
-                      <ScrollReveal>
-                        {entry.coverSlug ? (
-                          <CoverHoverCard
-                            cover={entry.coverSlug}
-                            secondaryCover={entry.secondaryCoverSlug}
-                          >
-                            {cardBody}
-                          </CoverHoverCard>
-                        ) : (
-                          cardBody
-                        )}
-                      </ScrollReveal>
-                    </div>
-                  </div>
+                <li key={entry.id} className="relative pl-10 md:pl-16">
+                  <ScrollReveal>
+                    {entry.coverSlug ? (
+                      <CoverHoverCard cover={entry.coverSlug} secondaryCover={entry.secondaryCoverSlug}>
+                        {cardBody}
+                      </CoverHoverCard>
+                    ) : (
+                      cardBody
+                    )}
+                  </ScrollReveal>
 
-                  {/* mobile / single column */}
-                  <div className="md:hidden">
-                    <ScrollReveal>
-                      {entry.coverSlug ? (
-                        <CoverHoverCard cover={entry.coverSlug} secondaryCover={entry.secondaryCoverSlug}>
-                          {cardBody}
-                        </CoverHoverCard>
-                      ) : (
-                        cardBody
-                      )}
-                    </ScrollReveal>
-                  </div>
-
-                  <span className="absolute left-2.5 top-2 h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-cyan-traveler shadow-[0_0_10px_rgba(126,203,255,0.8)] md:left-1/2" />
+                  <span className="absolute left-3 top-2 h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-cyan-traveler shadow-[0_0_10px_rgba(126,203,255,0.8)] md:left-4" />
                 </li>
               );
             })}

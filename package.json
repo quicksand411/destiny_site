@@ -9,7 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "14.2.5",
+    "@floating-ui/react": "^0.27.20",
+    "next": "14.2.35",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -22,6 +23,6 @@
     "postcss": "^8.4.40",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
-    "eslint-config-next": "14.2.5"
+    "eslint-config-next": "14.2.35"
   }
 }

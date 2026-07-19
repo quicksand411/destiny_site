@@ -1,3 +1,4 @@
+import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeading from "@/components/SectionHeading";
 import {
@@ -11,7 +12,15 @@ import {
 export default function Gameplay() {
   return (
     <section id="gameplay" className="relative overflow-hidden py-24 md:py-32">
-      <div className="mx-auto max-w-4xl px-4">
+      <Image
+        src="/images/bg/destiny-2-director-map.jpg"
+        alt=""
+        fill
+        className="object-cover opacity-20"
+        sizes="100vw"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-void-950/85 via-void-950/80 to-void-950" />
+      <div className="relative mx-auto max-w-4xl px-4">
         <SectionHeading kicker="Section 10" title="Gameplay: Seasons, PvP & Gambit" />
 
         <div className="space-y-14">

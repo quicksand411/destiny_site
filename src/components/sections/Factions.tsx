@@ -1,3 +1,4 @@
+import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeading from "@/components/SectionHeading";
 import { races, cityFactions, locationsText } from "@/content/factions";
@@ -5,7 +6,15 @@ import { races, cityFactions, locationsText } from "@/content/factions";
 export default function Factions() {
   return (
     <section id="factions" className="relative overflow-hidden py-24 md:py-32">
-      <div className="mx-auto max-w-6xl px-4">
+      <Image
+        src="/images/bg/orrery-sun-earth.jpg"
+        alt=""
+        fill
+        className="object-cover opacity-20"
+        sizes="100vw"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-void-950/85 via-void-950/80 to-void-950" />
+      <div className="relative mx-auto max-w-6xl px-4">
         <SectionHeading kicker="Section 5" title="Races, Factions & Locations" />
 
         <ScrollReveal className="mb-6 text-center">
