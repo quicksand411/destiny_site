@@ -15,7 +15,15 @@ export default function SubclassChip({ subclass }: { subclass: SubclassEntry }) 
     open,
     onOpenChange: setOpen,
     strategy: "fixed",
-    middleware: [offset(12), flip(), shift({ padding: 16 })],
+    placement: "right-start",
+    middleware: [
+      offset(18),
+      flip({
+        fallbackPlacements: ["left-start", "bottom-start", "top-start", "right-end", "left-end"],
+        padding: 16,
+      }),
+      shift({ padding: 16 }),
+    ],
     whileElementsMounted: autoUpdate,
   });
 

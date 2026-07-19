@@ -14,10 +14,10 @@ export default function Timeline() {
         src="/images/bg/orrery-traveler.jpg"
         alt=""
         fill
-        className="object-cover opacity-[0.15]"
+        className="scale-105 object-cover opacity-45 blur-[2px]"
         sizes="100vw"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-void-950/90 via-void-950/85 to-void-950" />
+      <div className="absolute inset-0 bg-gradient-to-b from-void-950/65 via-void-950/70 to-void-950/92" />
       <Starfield className="opacity-40" />
       <div className="relative mx-auto max-w-6xl px-4">
         <SectionHeading

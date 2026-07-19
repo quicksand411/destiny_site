@@ -4,46 +4,42 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { useFloating, offset, flip, shift, autoUpdate } from "@floating-ui/react";
-import { covers } from "@/content/covers";
 
-interface CoverHoverCardProps {
-  cover: string;
-  secondaryCover?: string;
-  /** Optional one-line comment/blurb shown under the primary cover's date (e.g. a release's summary). */
-  comment?: string;
+interface PortraitHoverCardProps {
+  src?: string;
+  alt: string;
+  caption?: string;
   children: ReactNode;
   className?: string;
 }
 
 /**
- * Wraps its children (a timeline/release card) so that hovering, focusing,
- * or tapping reveals a floating popover with the release's cover art and
- * date.
+ * Wraps its children (a character/class/race card) so that hovering,
+ * focusing, or tapping reveals a floating popover with a portrait image.
  *
- * Positioning: on fine-pointer devices (mouse/trackpad) the popover follows
- * the cursor, using a virtual floating-ui reference element updated on every
- * mousemove. On coarse-pointer devices (touch) it anchors to the wrapper
- * element itself instead, since there's no cursor to follow. In both cases
- * `flip()` + `shift()` keep the popover fully inside the viewport, and it's
- * rendered through a portal to `document.body` so it can never be visually
- * clipped by an `overflow-x-auto`/`overflow-hidden` ancestor (e.g. the
- * horizontal-scrolling release roadmap).
+ * Positioning logic is copied verbatim from CoverHoverCard: on fine-pointer
+ * devices (mouse/trackpad) the popover follows the cursor via a virtual
+ * floating-ui reference element updated on every mousemove; on coarse-pointer
+ * devices (touch) it anchors to the wrapper element itself instead. `flip()`
+ * + `shift()` keep the popover inside the viewport, and it's rendered
+ * through a portal to `document.body` so it's never clipped by an
+ * `overflow-x-auto`/`overflow-hidden` ancestor.
  *
  * Keyboard accessible (opens on focus, closes on blur) and works on touch
- * (tap toggles open/closed).
+ * (tap toggles open/closed). If no `src` is provided (no portrait sourced
+ * for this entity), it gracefully renders just the children with no
+ * popover, same fallback behavior as CoverHoverCard.
  */
-export default function CoverHoverCard({
-  cover,
-  secondaryCover,
-  comment,
+export default function PortraitHoverCard({
+  src,
+  alt,
+  caption,
   children,
   className = "",
-}: CoverHoverCardProps) {
+}: PortraitHoverCardProps) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const isCoarseRef = useRef(false);
-  const info = covers[cover];
-  const secondaryInfo = secondaryCover ? covers[secondaryCover] : undefined;
 
   const { refs, floatingStyles } = useFloating({
     open,
@@ -68,7 +64,7 @@ export default function CoverHoverCard({
     }
   }, []);
 
-  if (!info) {
+  if (!src) {
     return <div className={className}>{children}</div>;
   }
 
@@ -117,19 +113,6 @@ export default function CoverHoverCard({
     }
   };
 
-  const renderCover = (c: { src: string; title: string; date: string }, divider: boolean) => (
-    <>
-      {divider && <div className="my-2 h-px w-full bg-white/10" />}
-      <div className="relative mx-auto h-[240px] w-[180px] overflow-hidden rounded-md">
-        <Image src={c.src} alt={c.title} fill sizes="180px" className="object-cover" />
-      </div>
-      <p className="mt-2 text-center font-display text-sm tracking-wide text-traveler">
-        {c.title}
-      </p>
-      <p className="text-center text-xs text-mute">{c.date}</p>
-    </>
-  );
-
   return (
     <div
       ref={refs.setReference}
@@ -160,13 +143,12 @@ export default function CoverHoverCard({
               style={{ transformOrigin: "top center" }}
             >
               <div className="rounded-lg border border-cyan-traveler/40 bg-void-950/95 p-2 shadow-[0_0_24px_rgba(126,203,255,0.25)] backdrop-blur">
-                {renderCover(info, false)}
-                {comment && (
-                  <p className="mt-2 max-w-[220px] text-center text-[11px] leading-relaxed text-mute">
-                    {comment}
-                  </p>
+                <div className="relative mx-auto h-[220px] w-[180px] overflow-hidden rounded-md">
+                  <Image src={src} alt={alt} fill sizes="180px" className="object-cover" />
+                </div>
+                {caption && (
+                  <p className="mt-2 text-center text-xs text-mute">{caption}</p>
                 )}
-                {secondaryInfo && renderCover(secondaryInfo, true)}
               </div>
             </div>
           </div>,

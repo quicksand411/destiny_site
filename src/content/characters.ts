@@ -59,9 +59,39 @@ export const vanguardAllies: SimpleCard[] = [
       "Mara's brother, killer of Cayde-6, later revived as “the Crow” and inducted into the ranks of allies.",
   },
   {
-    name: "Amanda Holliday, Hawthorne, Petra Venj, Mithrax, Suraya Hawthorne, Asher Mir, Failsafe, Sloane",
+    name: "Amanda Holliday",
     description:
-      "Secondary but recognizable allies from various periods of the story.",
+      "The Last City's chief shipwright and vehicle specialist, running the Hangar and later the H.E.L.M.",
+  },
+  {
+    name: "Suraya Hawthorne",
+    description:
+      "An independent Guardian-adjacent ranger who led survivors at the Farm after the Red War and later became a Vanguard-aligned commander.",
+  },
+  {
+    name: "Petra Venj",
+    description:
+      "A Reef-born agent of Queen Mara Sov, running Petra's Run and curating the Dreaming City's Guardian activities.",
+  },
+  {
+    name: "Mithrax",
+    description:
+      "A reformed Fallen Kell of House Light, allied with the Last City since Season of the Splicer.",
+  },
+  {
+    name: "Asher Mir",
+    description:
+      "An acerbic exiled Warlock scientist studying the Vex, first on Io and later on Europa.",
+  },
+  {
+    name: "Failsafe",
+    description:
+      "A shipboard AI aboard the derelict Exodus Black on Nessus, driven eccentric by centuries of solitude.",
+  },
+  {
+    name: "Sloane",
+    description:
+      "A Titan commander overseeing the Guardian outpost on Titan, a former protégé of Zavala.",
   },
   {
     name: "Orin",

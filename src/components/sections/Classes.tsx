@@ -2,6 +2,8 @@ import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeading from "@/components/SectionHeading";
 import SubclassChip from "@/components/SubclassChip";
+import PortraitHoverCard from "@/components/PortraitHoverCard";
+import { getPortrait } from "@/content/portraits";
 import {
   classIntro,
   classes,
@@ -17,24 +19,33 @@ export default function Classes() {
         src="/images/bg/orrery-earth-moon-indigo.jpg"
         alt=""
         fill
-        className="object-cover opacity-20"
+        className="scale-105 object-cover opacity-50 blur-[2px]"
         sizes="100vw"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-void-950/85 via-void-950/80 to-void-950" />
+      <div className="absolute inset-0 bg-gradient-to-b from-void-950/60 via-void-950/65 to-void-950/90" />
       <div className="relative mx-auto max-w-5xl px-4">
         <SectionHeading kicker="Section 4" title="Classes & Subclasses" subtitle={classIntro} />
 
         <div className="mb-16 grid gap-5 md:grid-cols-3">
-          {classes.map((c) => (
-            <ScrollReveal key={c.name}>
-              <div className="h-full rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center transition-transform duration-300 hover:-translate-y-1">
-                <h3 className="font-display text-xl font-semibold tracking-wide text-traveler">
-                  {c.name}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-mute">{c.description}</p>
-              </div>
-            </ScrollReveal>
-          ))}
+          {classes.map((c) => {
+            const portrait = getPortrait(c.name);
+            return (
+              <ScrollReveal key={c.name}>
+                <PortraitHoverCard
+                  src={portrait?.src}
+                  alt={portrait?.alt ?? c.name}
+                  caption={c.name}
+                >
+                  <div className="h-full rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center transition-transform duration-300 hover:-translate-y-1">
+                    <h3 className="font-display text-xl font-semibold tracking-wide text-traveler">
+                      {c.name}
+                    </h3>
+                    <p className="mt-3 text-sm leading-relaxed text-mute">{c.description}</p>
+                  </div>
+                </PortraitHoverCard>
+              </ScrollReveal>
+            );
+          })}
         </div>
 
         <ScrollReveal className="mb-6 text-center">
